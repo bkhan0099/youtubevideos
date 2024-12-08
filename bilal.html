@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional YouTube Embed Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e3c72;
+            padding: 10px 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .tabs {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar .tabs a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .navbar .tabs a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar .counter {
+            background-color: #007BFF;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Main Layout Container */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+
+        /* Playlist and Video Player Layout */
+        .playlist-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        .player-container {
+            width: 70%;
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .player-container iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+        }
+
+        .playlist {
+            width: 25%;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .playlist h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .playlist ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .playlist li {
+            padding: 10px;
+            background-color: #f4f6f9;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .playlist li:hover {
+            background-color: #e1e1e1;
+        }
+
+        /* Footer */
+        footer {
+            padding: 10px;
+            background-color: #1e3c72;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Sign-In Popup (Modal) */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup-container {
+            background: rgba(255, 255, 255, 0.9); /* Transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .popup-container h2 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .popup-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .popup-container input {
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .popup-container button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .popup-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .popup-container .back-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .popup-container .back-link a {
+            text-decoration: none;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        .popup-container .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            background: transparent;
+            border: none;
+            color: #333;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="tabs">
+            <a href="#">Home</a>
+            <a href="#" onclick="showPopup()">Sign In</a> <!-- Show the Sign-In Modal -->
+        </div>
+        <div class="counter" id="counter">Rs: 0</div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Playlist and Video Player Layout -->
+        <div class="playlist-container">
+            <!-- Video Player -->
+            <div class="player-container">
+                <iframe 
+                    src="https://www.youtube-nocookie.com/embed/A3g1qL0Pook?enablejsapi=1" 
+                    id="video-player" allowfullscreen>
+                </iframe>
+            </div>
+
+            <!-- Playlist -->
+            <div class="playlist">
+                <h3>Playlist</h3>
+                <ul>
+                    <li onclick="changeVideo('A3g1qL0Pook')">Video 1: Nature's Beauty</li>
+                    <li onclick="changeVideo('VMDlpO-BY74')">Video 2: Wildlife Wonders</li>
+                    <li onclick="changeVideo('vcn-DaZXd5g')">Video 3: Ocean Life</li>
+                    <!-- Add more videos here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign-In Popup Modal -->
+    <div class="overlay" id="overlay">
+        <div class="popup-container">
+            <button class="close-btn" onclick="closePopup()">X</button>
+            <h2>Sign In</h2>
+            <form action="#" method="POST" onsubmit="signIn(event)">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form>
+            <div class="back-link">
+                <a href="#">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let counter = 0;
+
+        // Check if the user is already signed in
+        window.onload = function() {
+            if (localStorage.getItem('signedIn') === 'true') {
+                console.log('User is already signed in');
+            } else {
+                showPopup();
+            }
+        };
+
+        // Increment counter by 2 when a video ends
+        function onVideoEnd() {
+            counter += 2;
+            document.getElementById('counter').textContent = `Rs: ${counter}`;
+        }
+
+        // Change video source when a playlist item is clicked
+        function changeVideo(videoId) {
+            const player = document.getElementById('video-player');
+            player.src = `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1`;
+        }
+
+        // Load YouTube IFrame API
+        function onYouTubeIframeAPIReady() {
+            const player = new YT.Player('video-player', {
+                events: {
+                    onStateChange: function(event) {
+                        if (event.data === YT.PlayerState.ENDED) {
+                            onVideoEnd();
+                        }
+                    }
+                }
+            });
+        }
+
+        // Dynamically load YouTube API script
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Show Sign-In Popup Modal
+        function showPopup() {
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        // Close Sign-In Popup Modal
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Sign In Form Submit Logic
+        function signIn(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Save sign-in status to localStorage
+            localStorage.setItem('signedIn', 'true');
+            closePopup();
+            console.log('User signed in');
+        }
+    </script>
+</body>
+</html>
